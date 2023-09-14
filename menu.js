@@ -7,6 +7,12 @@ function listenForClicks() {
       });
     }
 
+    function removeHeart(tabs) {
+      browser.tabs.sendMessage(tabs[0].id, {
+        command: 'remove-heart'
+      });
+    }
+
     function reset(tabs) {
       browser.tabs.sendMessage(tabs[0].id, {
         command: 'reset'
@@ -22,13 +28,17 @@ function listenForClicks() {
       return;
     }
 
-    if (e.target.type === 'reset') {
-      browser.tabs.query({active: true, currentWindow: true})
-        .then(reset)
-        .catch(reportError);
-    } else {
+    if (e.target.id === 'fix') {
       browser.tabs.query({active: true, currentWindow: true})
         .then(fix)
+        .catch(reportError);
+    } else if (e.target.id === 'remove-heart') {
+      browser.tabs.query({active: true, currentWindow: true})
+        .then(removeHeart)
+        .catch(reportError);
+    } else if (e.target.id === 'reset') {
+      browser.tabs.query({active: true, currentWindow: true})
+        .then(reset)
         .catch(reportError);
     }
   });

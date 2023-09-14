@@ -12,10 +12,19 @@
   // Max height for chat window in pixels
   const maxHeight = 240;
 
-  function findChat() {
+  function findChatFrame() {
     return document.getElementById('chatframe')
-      .contentDocument
+      .contentDocument;
+  }
+
+  function findChat() {
+    return findChatFrame()
       .getElementById('chat');
+  }
+
+  function findReactionControlPanel() {
+    return findChatFrame()
+      .getElementById('reaction-control-panel');
   }
 
   browser.runtime.onMessage.addListener((message) => {
@@ -23,10 +32,17 @@
       findChat()
         .style
         .setProperty('max-height', maxHeight + 'px');
+    } else if (message.command === 'remove-heart') {
+      findReactionControlPanel()
+        .style
+        .setProperty('display', 'none');
     } else if (message.command === 'reset') {
       findChat()
         .style
         .removeProperty('max-height');
+      findReactionControlPanel()
+        .style
+        .removeProperty('display');
     }
   });
 })();
